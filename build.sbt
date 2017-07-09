@@ -18,7 +18,10 @@ libraryDependencies ++= Seq(
 
 enablePlugins(DockerPlugin)
 
-imageNames in docker := Seq(ImageName(s"synesso/toonbrew-bot:${git.gitHeadCommit.value.get}"))
+imageNames in docker := Seq(
+  ImageName(s"synesso/toonbrew-bot:${git.gitHeadCommit.value.get}"),
+  ImageName(s"synesso/toonbrew-bot:latest")
+)
 
 docker := (docker dependsOn assembly).value
 

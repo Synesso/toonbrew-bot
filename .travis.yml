@@ -1,0 +1,39 @@
+language: scala
+
+sudo: required
+
+services:
+  - docker
+
+jdk: oraclejdk8
+
+scala:
+  - 2.11.11
+
+script:
+  - sbt test
+
+after_success:
+  - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
+  - sbt assembly dockerBuildAndPush
+
+notifications:
+  slack: tallygo:drRXMPWJlGchggkl5eGVgAXU
+  email: false
+
+before_cache:
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt -name "*.lock" -delete
+
+cache:
+  branch: md5deep
+  directories:
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/boot/"
+  - "$HOME/.sbt/launchers/"
+  - "$HOME/.coursier"
+
+env:
+  global:
+  - secure: A6av11lYACL0zzXxwDGiFdwhQCSdM8cFbb8FX1rLURzVpiBDMlB+zq59kKOnoz+DLvgwKypnOcPvsf5wOptJ3jCKfUT/Snlwfrw07e4/TEZLrJ7ZeKLs182h/I2upV5vg9vDtsaUsMc1l0dscxXTsIQBwnxdfkLnjuCf4CKKY04Sj8dgDIjgQjKxVIp2zuC1l6Mf73Hn3i0sO+9Yu6F43sjQjy7f/D/h5lUC+GVNVu5T8IyjEG1ha/bapIaGQjAGirteZUoDUbaAyecX6Vf+DZn4WUdGUm52L9XcUQajvHWHasqVLm9uMraZKZV27i0eqCS696s6MuA3QC9i1575HdVqWaNZsMXzbaaJke6Imjwn4UPopKdoE3U0CaveCCZIlQZOuwvS0RPz6ADJRescOjcUY7NVKFOaBF9A29b6JjiaPyLYfJ89K7EC26H5VawDeUfdo4MyYxSJZwffsImsWMbzC3ufhlV8nsP0KHvBTXCW71PVudiOPX4EWiALK99zoZQY5V6Du0XwrcVZo8FaTneBQRBYLyp9FGTVGe8DxUiRHSB8jZcAsBokO1gH1fwrhqXm4CdVHxE6tjR7lSD+j6B3YmA6250kQXROuGXM8aO3n6LVjIHPgWVsWS8/ugL2t7KZYtUx0WkLmrTrAreE0wAV+NICPxkZJW4Y1Tg50Rw=
+  - secure: MbL6ZTo1tqc2Wb/vnVj4ASzPlm+CXWi1FlIZxhrfvytXgSCj0P9XtRVFRJJzUg1ZCzLYz0I5KbnePn+Z9UOjOPsj/duGrHUn80ap24WtTcbtINlbGm6xtJLZA89aAwas1ydgmWbtiqFVsuy9H4TGOaT2w8njUi7hAdl2cJgsV104OPrKimRm0mBuIKcc6jT2N/8eBKShfiERjeXxg5JW8QGp0aeCxkiqH3QOgDwJTsvZNLdu+JIC8faJ95ZNIb1doq/6FVsduJmIRw857YDHeF9/ey4s+kMn2FS74y48tK5XLvF7IumNJNH5iEdnzr3cMS759P9NjhLWbi27pLt9USciKpmK9YaF0O5wztU85KWkbDNIBiHBT8W1zY3TBedtjsteOJ9PgE7n1h8PdI4bMrBPfzbjsaupzvZWlc1kUbLXJBZDkXvZtUkRUWClz3uCqWr1yrUWuf1yEFDB5smIjdPYbTqIg5Bu+AYg6CiJ5qKgA4Tn9Os0MtZhfq41223tbZwo0xaluUuz+4CYu8rvK0lzXMZq2arwpff5O8li9ppA0y2woi+eqrWZIYl5NCdOUBJ2/4n7nU93cWbgU8pQ6JGTMDkcSXlzw9GrteWjd98ICLQSbjRMXVLdQLrFScf+rjVZGPuoWfWh9v5zz94K9MFsNatYY179j4LqOvJqAmI=
