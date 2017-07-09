@@ -17,10 +17,6 @@ after_success:
   - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
   - sbt assembly dockerBuildAndPush
 
-notifications:
-  slack: tallygo:drRXMPWJlGchggkl5eGVgAXU
-  email: false
-
 before_cache:
   - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
   - find $HOME/.sbt -name "*.lock" -delete
