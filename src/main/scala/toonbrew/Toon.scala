@@ -17,27 +17,6 @@ object Toon extends Choose {
     Toon("", race, clazz, Female, Freeport, Agnostic)
   }
 
-//  def random(by: BrewMethod): Toon = {
-//    val (clazz, race) = by match {
-//      case ClassFirst =>
-//        val clazz = choose(permittedCombos.map(_._2).distinct)
-//        val race = choose(permittedCombos.filter(_._2 == clazz).map(_._1).distinct)
-//        (clazz, race)
-//      case RaceFirst =>
-//        val race = choose(permittedCombos.map(_._1).distinct)
-//        val clazz = choose(permittedCombos.filter(_._1 == race).map(_._2).distinct)
-//        (clazz, race)
-//    }
-//
-//    val cities = permittedCombos.filter(_._1 == race).filter(_._2 == clazz).map(_._4).distinct
-//    val city = choose(cities)
-//    val beliefs = permittedCombos.filter(_._1 == race).filter(_._2 == clazz).filter(_._4 == city).map(_._3).distinct
-//    val belief = choose(beliefs)
-//    val gender = choose(Seq(Female, Male))
-//    val name = Name.generate(gender, race)
-//    Toon(name, race, clazz, gender, city, belief)
-//  }
-
   private val permittedCombos: Seq[(Race, Clazz, Belief, City)] = List(
     (Human, Warrior, Agnostic, Freeport),
     (Human, Warrior, Agnostic, Qeynos),
@@ -346,8 +325,4 @@ object Toon extends Choose {
   private val permittedRaceClassCombos: Seq[(Race, Clazz)] = {
     permittedCombos.map(c => (c._1, c._2)).distinct
   }
-
-  println(permittedRaceClassCombos.size)
-  permittedRaceClassCombos.foreach(println)
-
 }
