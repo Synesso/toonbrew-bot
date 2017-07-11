@@ -18,7 +18,7 @@ class DiscordClient(client: IDiscordClient) {
   client.getDispatcher.registerListener(new IListener[MessageReceivedEvent] {
     override def handle(event: MessageReceivedEvent): Unit = {
       val channel = event.getMessage.getChannel
-      if (channel.getName == "general") {
+      if (channel.getName == "roll-a-toon") {
         event.getMessage.getContent.trim match {
           case "/brew" =>
             brew(channel, by = RaceFirst)
