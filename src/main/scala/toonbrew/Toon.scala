@@ -17,6 +17,14 @@ object Toon extends Choose {
     Toon("", race, clazz, Female, Freeport, Agnostic)
   }
 
+  def random(r: Race): Clazz = {
+    choose(permittedRaceClassCombos.filter(_._1 == r).map(_._2).distinct)
+  }
+
+  def random(c: Clazz): Race = {
+    choose(permittedRaceClassCombos.filter(_._2 == c).map(_._1).distinct)
+  }
+
   private val permittedCombos: Seq[(Race, Clazz, Belief, City)] = List(
     (Human, Warrior, Agnostic, Freeport),
     (Human, Warrior, Agnostic, Qeynos),
@@ -325,4 +333,9 @@ object Toon extends Choose {
   private val permittedRaceClassCombos: Seq[(Race, Clazz)] = {
     permittedCombos.map(c => (c._1, c._2)).distinct
   }
+
+  val clazzes: Seq[Clazz] = permittedRaceClassCombos.map(_._2).distinct
+
+  val races: Seq[Race] = permittedRaceClassCombos.map(_._1).distinct
+
 }

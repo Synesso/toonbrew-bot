@@ -10,7 +10,7 @@ import scala.util.{Random, Try}
 
 class DiscordClient(client: IDiscordClient) {
 
-  private val BrewCommand = """/brew(.*)""".r
+  private val BrewType= """/brew (.*)""".r
   private val RandRange = """/random (\d+) (\d+)""".r
   private val RandZero = """/random (\d+)""".r
   private val Rand = "/random"
@@ -22,8 +22,9 @@ class DiscordClient(client: IDiscordClient) {
         event.getMessage.getContent.trim match {
           case "/brew" =>
             brew(channel, by = RaceFirst)
-          case BrewCommand(method) =>
-            BrewMethod.forName(method.trim).map(brew(channel, _)).getOrElse(printUsage(channel))
+          case BrewType(t) =>
+            Toon.clazzes.find(_.toString equalsIgnoreCase t).map(Toon.random(_).toString).foreach(print(channel, _))
+            Toon.races.find(_.toString equalsIgnoreCase t).map(Toon.random(_).toString).foreach(print(channel, _))
           case RandRange(low, high) =>
             Try((low.toInt, high.toInt)).foreach { case (l, h) =>
               printRoll(channel, event.getMessage.getAuthor.getName, l, h)
@@ -56,10 +57,6 @@ class DiscordClient(client: IDiscordClient) {
 
   private def print(channel: IChannel, msg: String): IMessage = {
     new MessageBuilder(client).withChannel(channel).withContent(msg).build
-  }
-
-  private def printUsage(channel: IChannel): IMessage = {
-    print(channel, s"Acceptable brew methods: [${BrewMethod.acceptedValues.mkString(",")}]")
   }
 }
 
