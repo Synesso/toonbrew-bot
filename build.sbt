@@ -12,6 +12,7 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
   "io.spray" %% "spray-json" % "1.3.3",
   "ch.qos.logback" % "logback-classic" % "1.1.7",
+  "com.typesafe" % "config" % "1.3.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
   "com.github.austinv11" % "Discord4J" % "2.8.4"
 )

@@ -10,53 +10,17 @@ import scala.util.{Random, Try}
 
 class DiscordClient(client: IDiscordClient) {
 
-  private val BrewType= """/brew (.*)""".r
-  private val RandRange = """/random (\d+) (\d+)""".r
-  private val RandZero = """/random (\d+)""".r
-  private val Rand = "/random"
-
   client.getDispatcher.registerListener(new IListener[MessageReceivedEvent] {
     override def handle(event: MessageReceivedEvent): Unit = {
+      val author = event.getAuthor
       val channel = event.getMessage.getChannel
-      if (channel.getName == "roll-a-toon") {
-        event.getMessage.getContent.trim match {
-          case "/brew" =>
-            brew(channel, by = RaceFirst)
-          case BrewType(t) =>
-            Toon.clazzes.find(_.toString equalsIgnoreCase t).map(Toon.random(_).toString).foreach(print(channel, _))
-            Toon.races.find(_.toString equalsIgnoreCase t).map(Toon.random(_).toString).foreach(print(channel, _))
-          case RandRange(low, high) =>
-            Try((low.toInt, high.toInt)).foreach { case (l, h) =>
-              printRoll(channel, event.getMessage.getAuthor.getName, l, h)
-            }
-          case RandZero(high) =>
-            Try(high.toInt).foreach { h =>
-              printRoll(channel, event.getMessage.getAuthor.getName, 1, h)
-            }
-          case Rand =>
-            printRoll(channel, event.getMessage.getAuthor.getName, 1, 100)
-          case _ =>
-        }
-      }
+      val command: Option[ChatCommand] = ChatCommand.parse(event.getMessage.getContent.trim)
+      command.flatMap(_.response(author, channel)).foreach(print)
     }
   })
 
-  private def brew(channel: IChannel, by: BrewMethod): IMessage = {
-    val toon = Toon.random
-    val toonDesc = s"${toon.race} ${toon.clazz}"
-    new MessageBuilder(client).withChannel(channel).withContent(toonDesc).build
-  }
-
-  // from low, inclusive to high, inclusive. e.g. 1-100 can give 1 or 100
-  private def rng(low: Int, high: Int): Int = Random.nextInt(high + 1 - low) + low
-
-  private def printRoll(channel: IChannel, name: String, low: Int, high: Int): IMessage = {
-    val msg = s"$name rolls a number between $low and $high. It's ${rng(low, high)}."
-    print(channel, msg)
-  }
-
-  private def print(channel: IChannel, msg: String): IMessage = {
-    new MessageBuilder(client).withChannel(channel).withContent(msg).build
+  private def print(msg: Message): IMessage = {
+    new MessageBuilder(client).withChannel(msg.channel).withContent(msg.text).build
   }
 }
 
