@@ -9,16 +9,12 @@ import scala.annotation.tailrec
 
 object BrewToon {
   def apply(args: Seq[String]): Option[BrewToon] = {
-
-    println(args)
-
     @tailrec
     def loop(bt: BrewToon, args: Seq[String]): Option[BrewToon] = {
       args match {
         case Nil => Some(bt)
         case ("--full" | "-f") +: tail => loop(bt.copy(full = true), tail)
         case ("--race" | "-r") +: raceString +: tail =>
-          println(s"race = $raceString")
           Toon.racesMap.get(raceString.toLowerCase) match {
             case Some(race) => loop(bt.copy(race = Some(race)), tail)
             case None => None
