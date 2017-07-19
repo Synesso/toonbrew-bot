@@ -4,25 +4,35 @@ import toonbrew.Enums._
 import toonbrew.names.Name
 
 case class Toon(name: String, race: Race, clazz: Clazz, gender: Gender, city: City, belief: Belief) {
-  def worship: String = belief match {
-    case Agnostic => ", agnostic"
-    case b => s" worshipping $b"
+  def describeSuccinctly = s"$race $clazz"
+  def describeFully: String = {
+    val (beliefPre, beliefPost) = belief match {
+      case Agnostic => ("an agnostic,", "")
+      case deity => ("a", s" Follower of $deity.")
+    }
+    s"$name, $beliefPre ${gender.toString.toLowerCase} **$race $clazz** of $city.$beliefPost"
   }
 }
 
 object Toon extends Choose {
 
   def random: Toon = {
-    val (race, clazz) = choose(permittedRaceClassCombos)
-    Toon("", race, clazz, Female, Freeport, Agnostic)
+    val clazz = choose(clazzes)
+    val race = choose(racesByClazz(clazz))
+    random(race, clazz)
   }
 
-  def random(r: Race): Clazz = {
-    choose(permittedRaceClassCombos.filter(_._1 == r).map(_._2).distinct)
+  def random(race: Race): Toon = {
+    val clazz = choose(clazzesByRace(race))
+    random(race, clazz)
   }
 
-  def random(c: Clazz): Race = {
-    choose(permittedRaceClassCombos.filter(_._2 == c).map(_._1).distinct)
+  private def random(race: Race, clazz: Clazz): Toon = {
+    val city = choose(citiesByRaceClazz(race, clazz))
+    val belief = choose(beliefsByRaceClazzCity(race, clazz, city))
+    val gender = choose(List(Female, Male))
+    val name = Name.generate(gender, race)
+    Toon(name, race, clazz, gender, city, belief)
   }
 
   private val permittedCombos: Seq[(Race, Clazz, Belief, City)] = List(
@@ -330,12 +340,30 @@ object Toon extends Choose {
     (Iksar, Monk, CazicThule, Cabilis)
   )
 
-  private val permittedRaceClassCombos: Seq[(Race, Clazz)] = {
-    permittedCombos.map(c => (c._1, c._2)).distinct
+  val clazzes: Seq[Clazz] = permittedCombos.map(_._2).distinct
+
+  val racesByClazz: Map[Clazz, Seq[Race]] = permittedCombos.foldLeft(Map.empty[Clazz, Seq[Race]]) {
+    case (map, (race, clazz, _, _)) => map.updated(clazz, race +: map.getOrElse(clazz, Nil))
   }
 
-  val clazzes: Seq[Clazz] = permittedRaceClassCombos.map(_._2).distinct
+  val clazzesByRace: Map[Race, Seq[Clazz]] = permittedCombos.foldLeft(Map.empty[Race, Seq[Clazz]]) {
+    case (map, (race, clazz, _, _)) => map.updated(race, clazz +: map.getOrElse(race, Nil))
+  }
 
-  val races: Seq[Race] = permittedRaceClassCombos.map(_._1).distinct
+  val citiesByRaceClazz: Map[(Race, Clazz), Seq[City]] =
+    permittedCombos.foldLeft(Map.empty[(Race, Clazz), Seq[City]]) {
+      case (map, (race, clazz, _, city)) => map.updated((race, clazz), city+: map.getOrElse((race, clazz), Nil))
+    }
 
+  val beliefsByRaceClazzCity: Map[(Race, Clazz, City), Seq[Belief]] =
+    permittedCombos.foldLeft(Map.empty[(Race, Clazz, City), Seq[Belief]]) {
+      case (map, (race, clazz, belief, city)) =>
+        map.updated((race, clazz, city), belief +: map.getOrElse((race, clazz, city), Nil))
+    }
+
+  val races: Seq[Race] = permittedCombos.map(_._1).distinct
+
+  val racesMap: Map[String, Race] = races.map(r => r.getClass.getSimpleName.replaceAllLiterally("$", "").toLowerCase -> r).toMap
+
+  racesMap.foreach(println)
 }

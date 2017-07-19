@@ -1,12 +1,11 @@
 package toonbrew.names
 
 
-import toonbrew.Choose
 import toonbrew.Enums.{Female, Gender, Male}
 
 import scala.util.Random
 
-object Barbarians extends Choose {
+object Barbarians extends Names {
 
   private val nm1 = List("ae", "au", "ei", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u")
   private val nm2 = List("", "", "", "b", "bl", "br", "bh", "d", "dr", "dh", "f", "fr", "g", "gh", "gr", "gl", "h", "hy", "hr", "j", "k", "kh", "kr", "l", "ll", "m", "n", "p", "pr", "r", "rh", "s", "sk", "sg", "sm", "sn", "st", "t", "th", "thr", "ty", "v", "y")

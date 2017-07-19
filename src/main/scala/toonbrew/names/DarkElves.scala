@@ -1,14 +1,15 @@
 package toonbrew.names
 
-import toonbrew.Choose
 import toonbrew.Enums.Gender
 
 import scala.util.Random
 
-object DarkElves extends Choose {
+object DarkElves extends Names {
+
+  private val generators: Seq[() => String] = List(warhammer _)
 
   def name(gender: Gender): String = {
-    warhammer
+    choose(generators)()
   }
 
   private def warhammer = {
@@ -27,7 +28,6 @@ object DarkElves extends Choose {
     val rnd = Random.nextInt(nm9.size)
     val rnd2 = Random.nextInt(nm10.size)
     val nameL = nm9(rnd) + nm10(rnd2)
-
 
     nameL
   }
