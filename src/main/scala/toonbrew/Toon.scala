@@ -364,6 +364,4 @@ object Toon extends Choose {
   val races: Seq[Race] = permittedCombos.map(_._1).distinct
 
   val racesMap: Map[String, Race] = races.map(r => r.getClass.getSimpleName.replaceAllLiterally("$", "").toLowerCase -> r).toMap
-
-  racesMap.foreach(println)
 }
