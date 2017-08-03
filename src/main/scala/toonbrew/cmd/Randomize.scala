@@ -7,7 +7,6 @@ import scala.util.{Random, Try}
 
 object Randomize {
   def apply(args: Seq[String]): Option[Randomize] = {
-    println(args)
     args match {
       case Nil => Some(Randomize())
       case Seq(high) => Try(high.toInt).toOption.map(h => Randomize(max = h))

@@ -9,10 +9,12 @@ import scala.annotation.tailrec
 
 object BrewToon {
   def apply(args: Seq[String]): Option[BrewToon] = {
+
     @tailrec
     def loop(bt: BrewToon, args: Seq[String]): Option[BrewToon] = {
       args match {
         case Nil => Some(bt)
+        case ("--name" | "-n") +: tail => loop(bt.copy(nameOnly = true), tail)
         case ("--full" | "-f") +: tail => loop(bt.copy(full = true), tail)
         case ("--race" | "-r") +: raceString +: tail =>
           Toon.racesMap.get(raceString.toLowerCase) match {
@@ -26,11 +28,15 @@ object BrewToon {
   }
 }
 
-case class BrewToon(race: Option[Race] = None, full: Boolean = false) extends ChatCommand {
+case class BrewToon(race: Option[Race] = None, full: Boolean = false, nameOnly: Boolean = false) extends ChatCommand {
   override def response(author: IUser, channel: IChannel): Option[Message] = {
     if (acceptableChannels.contains(channel.getName)) {
       val toon = race.map(r => Toon.random(r)).getOrElse(Toon.random)
-      val text = if (full) toon.describeFully else toon.describeSuccinctly
+      val text =
+        if (full) toon.describeFully
+        else if (nameOnly && race.isDefined) s"${toon.name} the ${toon.clazz}"
+        else if (nameOnly) toon.name
+        else toon.describeSuccinctly
       Some(Message(channel, text))
     } else None
   }

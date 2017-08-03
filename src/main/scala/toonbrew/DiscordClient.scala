@@ -3,11 +3,9 @@ package toonbrew
 import sx.blah.discord.api.events.IListener
 import sx.blah.discord.api.{ClientBuilder, IDiscordClient}
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent
-import sx.blah.discord.handle.obj.{IChannel, IMessage}
+import sx.blah.discord.handle.obj.IMessage
 import sx.blah.discord.util.MessageBuilder
 import toonbrew.cmd.{ChatCommand, Message}
-
-import scala.util.{Random, Try}
 
 class DiscordClient(client: IDiscordClient) {
 
