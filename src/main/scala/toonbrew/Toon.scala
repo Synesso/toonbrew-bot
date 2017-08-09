@@ -1,6 +1,7 @@
 package toonbrew
 
 import toonbrew.Enums._
+import toonbrew.Toon.{choose, citiesByRaceClazz}
 import toonbrew.names.Name
 
 case class Toon(name: String, race: Race, clazz: Clazz, gender: Gender, city: City, belief: Belief) {
@@ -16,23 +17,26 @@ case class Toon(name: String, race: Race, clazz: Clazz, gender: Gender, city: Ci
 
 object Toon extends Choose {
 
-  def random: Toon = {
-    val clazz = choose(clazzes)
-    val race = choose(racesByClazz(clazz))
-    random(race, clazz)
-  }
+  def random(raceOpt: Option[Race] = None, cities: Option[Set[City]] = None): Option[Toon] = {
+    val options = permittedCombos.filter{ case (r, _, _, c) =>
+      (raceOpt.isEmpty || raceOpt.contains(r)) &&
+      (cities.isEmpty || cities.exists(_.contains(c)))
+    }
+    val clazz = choose(options.map(_._2).distinct)
+    val race = choose(options.filter(_._2 == clazz).map(_._1))
+    for {
+      clazz <- choose(options.map(_._2).distinct)
+      race <- choose(options.filter(_._2 == clazz).map(_._1))
+    } yield random(race, clazz)
+  }.flatten
 
-  def random(race: Race): Toon = {
-    val clazz = choose(clazzesByRace(race))
-    random(race, clazz)
-  }
-
-  private def random(race: Race, clazz: Clazz): Toon = {
-    val city = choose(citiesByRaceClazz(race, clazz))
-    val belief = choose(beliefsByRaceClazzCity(race, clazz, city))
-    val gender = choose(List(Female, Male))
-    val name = Name.generate(gender, race)
-    Toon(name, race, clazz, gender, city, belief)
+  private def random(race: Race, clazz: Clazz): Option[Toon] = {
+    for {
+      city <- choose(citiesByRaceClazz(race, clazz))
+      belief <- choose(beliefsByRaceClazzCity(race, clazz, city))
+      gender <- choose(List(Female, Male))
+      name = Name.generate(gender, race)
+    } yield Toon(name, race, clazz, gender, city, belief)
   }
 
   private val permittedCombos: Seq[(Race, Clazz, Belief, City)] = List(
@@ -364,4 +368,13 @@ object Toon extends Choose {
   val races: Seq[Race] = permittedCombos.map(_._1).distinct
 
   val racesMap: Map[String, Race] = races.map(r => r.getClass.getSimpleName.replaceAllLiterally("$", "").toLowerCase -> r).toMap
+
+  val areasMap: Map[String, Set[City]] = Map(
+    Faydwer.toString.toLowerCase -> Set(Kelethin, Kaladim, Felwithe, AkAnon),
+    East.toString.toLowerCase -> Set(Grobb, Oggok, Freeport, Neriak),
+    West.toString.toLowerCase -> Set(Qeynos, Halas),
+    Odin.toString.toLowerCase -> Set(Erudin, Paineel),
+    Kunark.toString.toLowerCase -> Set(Cabilis)
+  )
+
 }

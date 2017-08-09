@@ -7,7 +7,7 @@ object WoodElves extends Names {
   private val generators: Seq[(Gender) => String] = List(warhammer)
 
   def name(gender: Gender): String = {
-    choose(generators)(gender)
+    oneOf(generators)(gender)
   }
 
   def warhammer(gender: Gender): String = {
@@ -22,13 +22,13 @@ object WoodElves extends Names {
     val nm8 = Array("", "", "", "", "f", "h", "l", "n", "s", "th")
 
     gender match {
-      case Female => choose(List(
-        () => s"${choose(nm5)}${choose(nm6)}${choose(nm7)}${choose(nm6)}${choose(nm8)}",
-        () => s"${choose(nm5)}${choose(nm6)}${choose(nm7)}${choose(nm6)}${choose(nm7)}${choose(nm8)}"
+      case Female => oneOf(List(
+        () => s"${oneOf(nm5)}${oneOf(nm6)}${oneOf(nm7)}${oneOf(nm6)}${oneOf(nm8)}",
+        () => s"${oneOf(nm5)}${oneOf(nm6)}${oneOf(nm7)}${oneOf(nm6)}${oneOf(nm7)}${oneOf(nm8)}"
       ))()
-      case Male => choose(List(
-        () => s"${choose(nm1)}${choose(nm2)}${choose(nm3)}${choose(nm2)}${choose(nm4)}",
-        () => s"${choose(nm1)}${choose(nm2)}${choose(nm3)}${choose(nm2)}${choose(nm3)}${choose(nm2)}${choose(nm4)}"
+      case Male => oneOf(List(
+        () => s"${oneOf(nm1)}${oneOf(nm2)}${oneOf(nm3)}${oneOf(nm2)}${oneOf(nm4)}",
+        () => s"${oneOf(nm1)}${oneOf(nm2)}${oneOf(nm3)}${oneOf(nm2)}${oneOf(nm3)}${oneOf(nm2)}${oneOf(nm4)}"
       ))()
     }
   }

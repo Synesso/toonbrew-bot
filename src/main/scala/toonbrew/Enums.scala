@@ -49,6 +49,13 @@ object Enums {
   case object Qeynos extends City
   case object Rivervale extends City
 
+  sealed trait Area
+  case object Faydwer extends Area
+  case object East extends Area
+  case object West extends Area
+  case object Kunark extends Area
+  case object Odin extends Area
+
   sealed trait Gender
   case object Female extends Gender
   case object Male extends Gender

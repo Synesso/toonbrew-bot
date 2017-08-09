@@ -7,7 +7,7 @@ object Iksars extends Names {
   private val generators: Seq[(Gender) => String] = List(warhammer)
 
   def name(gender: Gender): String = {
-    choose(generators)(gender)
+    oneOf(generators)(gender)
   }
 
   def warhammer(gender: Gender): String = {
@@ -19,11 +19,11 @@ object Iksars extends Names {
     val nm4 = Array("", "", "", "c", "ch", "cl", "k", "l", "n", "p", "r", "tl", "x")
     val nm5 = Array("c", "ch", "cl", "k", "l", "n", "p", "r", "tl", "x")
 
-    choose(List(
-      () => s"${choose(nm)}${choose(nm2)}${choose(nm5)}${choose(nm)}${choose(nm2)}${choose(nm3)}",
-      () => s"${choose(nm1)}${choose(nm2)}${choose(nm3)}${choose(nm2)}${choose(nm4)}",
-      () => s"${choose(nm1)}${choose(nm2)}${choose(nm3)}${choose(nm2)}${choose(nm3)}",
-      () => s"${choose(nm1)}${choose(nm2)}${choose(nm3)}${choose(nm2)}${choose(nm4.drop(3))}"
+    oneOf(List(
+      () => s"${oneOf(nm)}${oneOf(nm2)}${oneOf(nm5)}${oneOf(nm)}${oneOf(nm2)}${oneOf(nm3)}",
+      () => s"${oneOf(nm1)}${oneOf(nm2)}${oneOf(nm3)}${oneOf(nm2)}${oneOf(nm4)}",
+      () => s"${oneOf(nm1)}${oneOf(nm2)}${oneOf(nm3)}${oneOf(nm2)}${oneOf(nm3)}",
+      () => s"${oneOf(nm1)}${oneOf(nm2)}${oneOf(nm3)}${oneOf(nm2)}${oneOf(nm4.drop(3))}"
     ))()
   }
 

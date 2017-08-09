@@ -8,7 +8,7 @@ object Erudites extends Names {
   private val generators: Seq[(Gender) => String] = List(wow)
 
   def name(gender: Gender): String = {
-    choose(generators)(gender)
+    oneOf(generators)(gender)
   }
 
   private def wow(gender: Gender) = {
@@ -20,10 +20,10 @@ object Erudites extends Names {
     val nm6 = Array("aena", "alda", "alle", "ana", "anae", "andra", "anea", "ann", "anna", "anne", "anni", "ara", "da", "dine", "dori", "dra", "drae", "drea", "drel", "drin", "drine", "eda", "elda", "eli", "elly", "enna", "era", "erae", "erea", "estra", "iah", "ice", "inda", "ine", "inne", "inth", "ise", "le", "lean", "leane", "len", "lenn", "lenne", "li", "lia", "ly", "na", "nia", "nice", "onia", "ori", "ra", "rae", "rea", "rel", "riah", "rin", "rine", "rise", "vea", "via", "vie", "wae", "we", "wea", "yn", "yna", "ynna")
 
     gender match {
-      case Female if Random.nextBoolean() => s"${choose(nm4)}${choose(nm5)}${choose(nm6)}"
-      case Female => s"${choose(nm4)}${choose(nm6)}"
-      case Male if Random.nextBoolean() => s"${choose(nm1)}${choose(nm2)}${choose(nm3)}"
-      case Male => s"${choose(nm1)}${choose(nm3)}"
+      case Female if Random.nextBoolean() => s"${oneOf(nm4)}${oneOf(nm5)}${oneOf(nm6)}"
+      case Female => s"${oneOf(nm4)}${oneOf(nm6)}"
+      case Male if Random.nextBoolean() => s"${oneOf(nm1)}${oneOf(nm2)}${oneOf(nm3)}"
+      case Male => s"${oneOf(nm1)}${oneOf(nm3)}"
     }
   }
 }

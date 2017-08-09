@@ -6,7 +6,7 @@ object Gnomes extends Names {
   private val generators: Seq[(Gender) => String] = List(dnd)
 
   def name(gender: Gender): String = {
-    choose(generators)(gender)
+    oneOf(generators)(gender)
   }
   
   private def dnd(gender: Gender): String = {
@@ -16,8 +16,8 @@ object Gnomes extends Names {
     val nm4 = Array("bi", "bys", "celi", "ci", "dira", "dysa", "fi", "fyx", "gani", "gyra", "hana", "hani", "kasys", "kini", "la", "li", "lin", "lys", "mila", "miphi", "myn", "myra", "na", "niana", "noa", "nove", "phina", "pine", "qaryn", "qys", "rhana", "roe", "sany", "ssa", "sys", "tina", "tra", "wyn", "wyse", "xi", "xis", "yaris", "yore", "za", "zyre")
 
     gender match {
-      case Female => s"${choose(nm3)}${choose(nm4)}"
-      case Male => s"${choose(nm1)}${choose(nm2)}"
+      case Female => s"${oneOf(nm3)}${oneOf(nm4)}"
+      case Male => s"${oneOf(nm1)}${oneOf(nm2)}"
     }
   }
 

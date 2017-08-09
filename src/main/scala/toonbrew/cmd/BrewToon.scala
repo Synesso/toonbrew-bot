@@ -1,7 +1,7 @@
 package toonbrew.cmd
 
 import sx.blah.discord.handle.obj.{IChannel, IUser}
-import toonbrew.Enums.Race
+import toonbrew.Enums.{Area, City, Race}
 import toonbrew.Toon
 import toonbrew.cmd.ChatCommand.acceptableChannels
 
@@ -21,6 +21,11 @@ object BrewToon {
             case Some(race) => loop(bt.copy(race = Some(race)), tail)
             case None => None
           }
+        case ("--area" | "-a") +: areaString +: tail =>
+          Toon.areasMap.get(areaString) match {
+            case Some(cities) => loop(bt.copy(cities = Some(cities)), tail)
+            case None => None
+          }
         case _ => None
       }
     }
@@ -28,16 +33,21 @@ object BrewToon {
   }
 }
 
-case class BrewToon(race: Option[Race] = None, full: Boolean = false, nameOnly: Boolean = false) extends ChatCommand {
+case class BrewToon(race: Option[Race] = None,
+                    full: Boolean = false,
+                    nameOnly: Boolean = false,
+                    cities: Option[Set[City]] = None) extends ChatCommand {
+
   override def response(author: IUser, channel: IChannel): Option[Message] = {
     if (acceptableChannels.contains(channel.getName)) {
-      val toon = race.map(r => Toon.random(r)).getOrElse(Toon.random)
+      Toon.random(race, cities).map { toon =>
       val text =
         if (full) toon.describeFully
         else if (nameOnly && race.isDefined) s"${toon.name} the ${toon.clazz}"
         else if (nameOnly) toon.name
         else toon.describeSuccinctly
-      Some(Message(channel, text))
+        Message(channel, text)
+      }
     } else None
   }
 }

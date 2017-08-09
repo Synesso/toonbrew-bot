@@ -7,7 +7,7 @@ object Dwarves extends Names {
   private val generators: Seq[(Gender) => String] = List(dnd)
 
   def name(gender: Gender): String = {
-    choose(generators)(gender)
+    oneOf(generators)(gender)
   }
 
   def dnd(gender: Gender): String = {
@@ -17,8 +17,8 @@ object Dwarves extends Names {
     val nm4 = Array("belle", "bera", "delle", "deth", "dielle", "dille", "dish", "dora", "dryn", "dyl", "giel", "glia", "glian", "gwyn", "la", "leen", "leil", "len", "lin", "linn", "lyl", "lyn", "lynn", "ma", "mera", "mora", "mura", "myl", "myla", "nan", "nar", "nas", "nera", "nia", "nip", "nis", "niss", "nora", "nura", "nyl", "nys", "nyss", "ra", "ras", "res", "ri", "ria", "rielle", "rin", "ris", "ros", "ryl", "ryn", "sael", "selle", "sora", "syl", "thel", "thiel", "tin", "tyn", "va", "van", "via", "vian", "waen", "win", "wyn", "wynn")
 
     gender match {
-      case Female => s"${choose(nm3)}${choose(nm4)}"
-      case Male => s"${choose(nm1)}${choose(nm2)}"
+      case Female => s"${oneOf(nm3)}${oneOf(nm4)}"
+      case Male => s"${oneOf(nm1)}${oneOf(nm2)}"
     }
   }
 

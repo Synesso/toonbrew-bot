@@ -23,23 +23,23 @@ object Barbarians extends Names {
         val rnd = Random.nextInt(nm2.size)
         val rnd2 = Random.nextInt(nm1.size)
         if (i < 3) {
-          nm2(rnd) + nm1(rnd2) + choose(nm4) + nm1(rnd2) + choose(nm4)
+          nm2(rnd) + nm1(rnd2) + oneOf(nm4) + nm1(rnd2) + oneOf(nm4)
         } else if (i < 8) {
-          nm2(rnd) + nm1(rnd2) + choose(nm3) + choose(if (rnd < 3) nm1.drop(3) else nm1) + choose(nm4)
+          nm2(rnd) + nm1(rnd2) + oneOf(nm3) + oneOf(if (rnd < 3) nm1.drop(3) else nm1) + oneOf(nm4)
         } else {
           val rnd4 = if (rnd < 3) Random.nextInt(nm1.size - 3) + 3 else Random.nextInt(nm1.size - 3)
-          nm2(rnd) + nm1(rnd2) + choose(nm3) + nm1(rnd4) + choose(nm3) +
-            choose(if (rnd < 3 || rnd4 < 3) nm1.drop(3) else nm1) + choose(nm4)
+          nm2(rnd) + nm1(rnd2) + oneOf(nm3) + nm1(rnd4) + oneOf(nm3) +
+            oneOf(if (rnd < 3 || rnd4 < 3) nm1.drop(3) else nm1) + oneOf(nm4)
         }
       case Male =>
         val rnd2 = Random.nextInt(nm6.size)
         val rnd4 = Random.nextInt(nm6.size)
         if (i < 3) {
-          choose(nm5.filterNot(_.isEmpty)) + choose(nm6) + choose(nm2) + choose(nm6) + choose(nm8)
+          oneOf(nm5.filterNot(_.isEmpty)) + oneOf(nm6) + oneOf(nm2) + oneOf(nm6) + oneOf(nm8)
         } else if (i < 8) {
-          choose(nm5) + nm6(rnd2) + choose(nm7) + choose(if (rnd2 < 5) nm6.drop(5) else nm6) + choose(nm8)
+          oneOf(nm5) + nm6(rnd2) + oneOf(nm7) + oneOf(if (rnd2 < 5) nm6.drop(5) else nm6) + oneOf(nm8)
         } else {
-          choose(nm5) + nm6(rnd2) + choose(nm7) + nm6(rnd4) + choose(nm7) + choose(if (rnd2 < 5 || rnd4 < 5) nm6.drop(5) else nm6)
+          oneOf(nm5) + nm6(rnd2) + oneOf(nm7) + nm6(rnd4) + oneOf(nm7) + oneOf(if (rnd2 < 5 || rnd4 < 5) nm6.drop(5) else nm6)
         }
     }
   }

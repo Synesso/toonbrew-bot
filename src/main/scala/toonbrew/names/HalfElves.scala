@@ -7,7 +7,7 @@ object HalfElves extends Names {
   private val generators: Seq[(Gender) => String] = List(dnd)
 
   def name(gender: Gender): String = {
-    choose(generators)(gender)
+    oneOf(generators)(gender)
   }
 
   def dnd(gender: Gender): String = {
@@ -17,8 +17,8 @@ object HalfElves extends Names {
     val nm4 = Array("aerys", "anys", "bellis", "bwynn", "cerys", "charis", "diane", "dove", "elor", "enyphe", "faen", "fine", "galyn", "gwynn", "hana", "hophe", "kaen", "kilia", "lahne", "lynn", "mae", "malis", "mythe", "nalore", "noa", "nys", "ona", "phira", "pisys", "qarin", "qwyn", "rila", "rora", "seris", "stine", "sys", "thana", "theris", "tihne", "trana", "viel", "vyre", "walyn", "waris", "xaris", "xipha", "yaries", "yra", "zenya", "zira")
 
     gender match {
-      case Female => s"${choose(nm3)}${choose(nm4)}"
-      case Male => s"${choose(nm1)}${choose(nm2)}"
+      case Female => s"${oneOf(nm3)}${oneOf(nm4)}"
+      case Male => s"${oneOf(nm1)}${oneOf(nm2)}"
     }
   }
 
