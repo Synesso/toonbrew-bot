@@ -373,7 +373,7 @@ object Toon extends Choose {
     Faydwer.toString.toLowerCase -> Set(Kelethin, Kaladim, Felwithe, AkAnon),
     East.toString.toLowerCase -> Set(Grobb, Oggok, Freeport, Neriak),
     West.toString.toLowerCase -> Set(Qeynos, Halas),
-    Odin.toString.toLowerCase -> Set(Erudin, Paineel),
+    Odus.toString.toLowerCase -> Set(Erudin, Paineel),
     Kunark.toString.toLowerCase -> Set(Cabilis)
   )
 

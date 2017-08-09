@@ -54,7 +54,7 @@ object Enums {
   case object East extends Area
   case object West extends Area
   case object Kunark extends Area
-  case object Odin extends Area
+  case object Odus extends Area
 
   sealed trait Gender
   case object Female extends Gender
