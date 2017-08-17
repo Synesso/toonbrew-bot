@@ -23,7 +23,7 @@ object Toon extends Choose {
       (cities.isEmpty || cities.exists(_.contains(c)))
     }
     val clazz = choose(options.map(_._2).distinct)
-    val race = choose(options.filter(_._2 == clazz).map(_._1))
+    val race = choose(options.filter(_._2 == clazz).map(_._1).distinct)
     for {
       clazz <- choose(options.map(_._2).distinct)
       race <- choose(options.filter(_._2 == clazz).map(_._1))
