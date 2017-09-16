@@ -371,7 +371,7 @@ object Toon extends Choose {
 
   val areasMap: Map[String, Set[City]] = Map(
     Faydwer.toString.toLowerCase -> Set(Kelethin, Kaladim, Felwithe, AkAnon),
-    East.toString.toLowerCase -> Set(Grobb, Oggok, Freeport, Neriak),
+    East.toString.toLowerCase -> Set(Grobb, Oggok, Freeport, Neriak, Rivervale),
     West.toString.toLowerCase -> Set(Qeynos, Halas),
     Odus.toString.toLowerCase -> Set(Erudin, Paineel),
     Kunark.toString.toLowerCase -> Set(Cabilis)
