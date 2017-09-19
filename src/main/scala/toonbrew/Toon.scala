@@ -1,7 +1,6 @@
 package toonbrew
 
 import toonbrew.Enums._
-import toonbrew.Toon.{choose, citiesByRaceClazz}
 import toonbrew.names.Name
 
 case class Toon(name: String, race: Race, clazz: Clazz, gender: Gender, city: City, belief: Belief) {
@@ -22,21 +21,27 @@ object Toon extends Choose {
       (raceOpt.isEmpty || raceOpt.contains(r)) &&
       (cities.isEmpty || cities.exists(_.contains(c)))
     }
-    val clazz = choose(options.map(_._2).distinct)
-    val race = choose(options.filter(_._2 == clazz).map(_._1).distinct)
-    for {
-      clazz <- choose(options.map(_._2).distinct)
-      race <- choose(options.filter(_._2 == clazz).map(_._1))
-    } yield random(race, clazz)
-  }.flatten
 
-  private def random(race: Race, clazz: Clazz): Option[Toon] = {
-    for {
-      city <- choose(citiesByRaceClazz(race, clazz))
-      belief <- choose(beliefsByRaceClazzCity(race, clazz, city))
-      gender <- choose(List(Female, Male))
-      name = Name.generate(gender, race)
-    } yield Toon(name, race, clazz, gender, city, belief)
+    val restrictToClass = {
+      val clazz = choose(options.map(_._2).distinct)
+      options.filter(o => clazz.contains(o._2))
+    }
+
+    val restrictToRace = {
+      val race = choose(restrictToClass.map(_._1).distinct)
+      restrictToClass.filter(o => race.contains(o._1))
+    }
+
+    val restrictToCity = {
+      val city = choose(restrictToRace.map(_._4).distinct)
+      restrictToRace.filter(o => city.contains(o._4))
+    }
+
+    choose(restrictToCity).map { case (race, clazz, belief, city) =>
+      val gender: Gender = choose(List(Female, Male)).get
+      val name = Name.generate(gender, race)
+      Toon(name, race, clazz, gender, city, belief)
+    }
   }
 
   private val permittedCombos: Seq[(Race, Clazz, Belief, City)] = List(
