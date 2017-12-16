@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.7",
   "com.typesafe" % "config" % "1.3.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
-  "com.github.austinv11" % "Discord4J" % "2.8.4",
+  "com.github.austinv11" % "Discord4J" % "2.9.3",
   "org.specs2" %% "specs2-core" % "3.9.5" % "test",
   "org.specs2" %% "specs2-scalacheck" % "3.9.5" % "test"
 )
